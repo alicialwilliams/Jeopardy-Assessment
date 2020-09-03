@@ -55,7 +55,7 @@ class Jeopardy extends Component {
 }
 
 handleSubmit = (event)=>{
-    alert('An answer was submitted')
+    
     event.preventDefault();
     let score = this.state.score
     this.setState({
@@ -63,6 +63,7 @@ handleSubmit = (event)=>{
     });
 
     if (this.state.answerData.answer === this.state.data.answer){
+        alert('YOU ARE CORRECT!')
         this.setState ({
             score: score += this.state.data.value,
             answerData:{answer:""}
@@ -71,11 +72,21 @@ handleSubmit = (event)=>{
         this.setState ({
             score:score -= this.state.data.value,
             answerData:{answer:""}
+
         })
     }
     
     this.getNewQuestion()
     this.setState({answer:""})
+}
+
+resetForm = (event)=> {
+    this.setState({
+        submitted: false,
+        answerData: {
+            answer:""
+        }
+    });
 }
 
   //when the component mounts, get a the first question
@@ -84,13 +95,18 @@ handleSubmit = (event)=>{
   }
   //display the results on the screen
   render() {
+    if(this.state.submitted){
+        return(
+            
+                <button onClick = {this.resetForm}>Next Question!</button>
+            )}
     return (
       <div className="jeopardyData">
         <GameDisplay
         question= {this.state.data.question}
         category={this.state.data.category}
         value={this.state.data.value}
-        score={this.state.data.score}
+        score={this.state.score}
         />
         <form onSubmit={this.handleSubmit}>
             <input  onChange={this.handleChange} />
